@@ -87,11 +87,11 @@ function App() {
 
   return (
     <>
-      <div className="w-full h-screen  relative overflow-hidden text-center">
+      <div className="w-full   text-center">
         <img
           src="bgimage.webp"
           alt="image"
-          className="w-full h-full object-cover"
+          className="w-full relative"
         />
         <div className="bg-blue-300/50 absolute inset-0  z-10"></div>
         <div className="absolute inset-0 z-20 px-5 top-20">
@@ -139,7 +139,7 @@ function App() {
           </div>
 
           {/* main weather card */}
-          <div className="w-7xl h-full  mx-auto mt-15 rounded-lg">
+          <div className="max-w-7xl h-full  mx-auto mt-15 rounded-lg">
             {loading && <p className="mt-4">Loading....</p>}
             {error && <p className="mt-4 text-white">{error}</p>}
             {weatherData && (
@@ -153,7 +153,7 @@ function App() {
                 <p>💨 Wind: {weatherData.wind.speed} m/s</p>
               </div>
             )}
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="mt-10 grid grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {defaultCitiesData.map((data) => (
                 <div
                   key={data.name}
