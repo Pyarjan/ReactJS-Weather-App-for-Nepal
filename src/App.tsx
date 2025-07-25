@@ -30,7 +30,13 @@ function App() {
   const [defaultCitiesData, setDefaultCitiesData] = useState<WeatherData[]>([]);
 
   useEffect(() => {
-    const defaultCities = ["Kathmandu", "Pokhara", "Biratnagar", "Lalitpur"];
+    const defaultCities = [
+      "Butwal",
+      "Kathmandu",
+      "Pokhara",
+      "Biratnagar",
+      "Lalitpur",
+    ];
     const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
     const fetchDefaults = async () => {
