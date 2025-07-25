@@ -11,8 +11,10 @@ const Footer = () => {
           target="_blank"
           className="mt-2 sm:mt-0 text-center sm:text-right"
         >
-          Built by{" "}
-          <span className="text-blue-400 font-semibold">Pyarjan Thapa</span>{" "}
+          Built by
+          <span className="text-blue-400 font-semibold">
+            Pyarjan Thapa
+          </span>{" "}
           &copy; {new Date().getFullYear()}
         </a>
       </div>
