@@ -30,13 +30,7 @@ function App() {
   const [defaultCitiesData, setDefaultCitiesData] = useState<WeatherData[]>([]);
 
   useEffect(() => {
-    const defaultCities = [
-      "Kathmandu",
-      "Pokhara",
-      "Biratnagar",
-      "Lalitpur",
-      // "Nepalgunj",
-    ];
+    const defaultCities = ["Kathmandu", "Pokhara", "Biratnagar", "Lalitpur"];
     const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
     const fetchDefaults = async () => {
@@ -61,14 +55,18 @@ function App() {
 
   const fetchWeather = async () => {
     try {
-      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},np&appid=${apiKey}&units=metric`;
+      setLoading(true);
+      setError("");
 
-      const response = await fetch(url);
+      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
       if (!city.trim()) {
         setError("Please enter a city name.");
         return;
       }
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},np&appid=${apiKey}&units=metric`;
+      const response = await fetch(url);
+
       if (!response.ok) {
         throw new Error("City not found!");
       }
@@ -86,65 +84,55 @@ function App() {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetchWeather();
+  };
+
   return (
     <>
       <CloudBackground />
-      <div className=" text-center min-h-screen p-2">
-        <h1 className="mb-2 text-white pt-15  text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
+      <div className="text-center min-h-screen p-2">
+        <h1 className="mb-2 text-white pt-15 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
           Nepal Weather App
         </h1>
         <p className="mb-2 text-gray-500 lg:text-xl">
           Real-time weather updates for major cities across Nepal
         </p>
-        <div className="sm:flex items-center justify-center mt-15 gap-5  sm:w-lg sm:mx-auto">
-          <div className="relative mb-5 flex  justify-center items-center sm:mb-0 w-full">
-            {/* Search Icon */}
-            <div className="absolute inset-y-0 left-3 flex items-center  pointer-events-none">
-              <IoSearch className="w-5 h-5 text-gray-400" />
-            </div>
 
-            {/* Input Field */}
-            <input
-              type="search"
-              placeholder="Search for a city in Nepal..."
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className="p-5 pl-10 focus:outline-0 rounded-full border border-gray-500 bg-gray-100 w-full"
-            />
-
-            {/* Hide the default cancel "X" in WebKit */}
-            <style>
-              {`
-            input[type="search"]::-webkit-search-cancel-button {
-              -webkit-appearance: none;
-              appearance: none;
-              display: none;
-            }
-          `}
-            </style>
-
-            {/* Search Button */}
-            <button
-              onClick={fetchWeather}
-              className="absolute right-0 w-auto   border-blue-400 px-5 font-semibold py-2 rounded-lg"
-            >
-              Search
-            </button>
+        {/* SEARCH FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="relative mb-5 flex justify-center items-center sm:mb-0 w-full sm:w-[500px] mx-auto"
+        >
+          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <IoSearch className="w-5 h-5 text-gray-400" />
           </div>
-        </div>
 
-        {/* main weather card */}
+          <input
+            type="search"
+            placeholder="Search for a city in Nepal..."
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="p-5 pl-10 focus:outline-0 rounded-full border border-gray-500 bg-gray-100 w-full"
+          />
+
+          <button
+            type="submit"
+            className="absolute right-0 w-auto border-blue-400 px-5 font-semibold py-2 rounded-lg"
+          >
+            Search
+          </button>
+        </form>
+
+        {/* Weather Results */}
         <div className="max-w-7xl mx-auto mt-15 rounded-lg">
-          {loading && <p className="mt-4">Loading....</p>}
-          {error && <p className="mt-4 text-white">{error}</p>}
+          {loading && <p className="mt-4 text-white">Loading...</p>}
+          {error && <p className="mt-4 text-red-400">{error}</p>}
           {weatherData && (
-            <div
-              key={weatherData.name}
-              className="backdrop-blur-xl rounded-xl border border-white shadow-sm  mx-auto p-6"
-            >
-              {/* Location */}
+            <div className="backdrop-blur-xl rounded-xl border border-white shadow-sm mx-auto p-6 ">
               <div className="mb-6 text-left">
-                <h3 className="text-lg  font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-gray-900">
                   {weatherData.name}
                 </h3>
                 <p className="text-sm text-gray-500">
@@ -152,7 +140,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Main weather display */}
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <div className="text-5xl font-light text-gray-900 mb-1">
@@ -169,7 +156,6 @@ function App() {
                 />
               </div>
 
-              {/* Weather metrics */}
               <div className="space-y-4 border-t border-white pt-5">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500 text-sm">Humidity</span>
@@ -186,13 +172,14 @@ function App() {
               </div>
             </div>
           )}
-          <div className="mt-10 grid grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-4 gap-2">
+
+          {/* Default City Cards */}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {defaultCitiesData.map((data) => (
               <div
                 key={data.name}
                 className="bg-white/50 min-w-full rounded-xl border border-gray-200 shadow-sm max-w-xs mx-auto p-6"
               >
-                {/* Location */}
                 <div className="mb-6 text-left">
                   <h3 className="text-lg font-medium text-gray-900">
                     {data.name}
@@ -200,7 +187,6 @@ function App() {
                   <p className="text-sm text-gray-500">{data.sys.country}</p>
                 </div>
 
-                {/* Main weather display */}
                 <div className="flex items-center justify-between mb-8">
                   <div>
                     <div className="text-5xl font-light text-gray-900 mb-1">
@@ -217,7 +203,6 @@ function App() {
                   />
                 </div>
 
-                {/* Weather metrics */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-500 text-sm">Humidity</span>
