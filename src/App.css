@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+@keyframes moveClouds {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.cloud-background {
+  background-image: url("/clouds.png");
+  background-repeat: repeat-x;
+  background-size: cover;
+  animation: moveClouds 80s linear infinite;
+}
