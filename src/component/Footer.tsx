@@ -6,11 +6,15 @@ const Footer = () => {
           🇳🇵 <strong>Nepal Weather App</strong> — Showing real-time weather
           updates for cities in Nepal only.
         </p>
-        <p className="mt-2 sm:mt-0 text-center sm:text-right">
+        <a
+          href="https://www.pyarjanthapa.com.np/"
+          target="_blank"
+          className="mt-2 sm:mt-0 text-center sm:text-right"
+        >
           Built by{" "}
           <span className="text-blue-400 font-semibold">Pyarjan Thapa</span>{" "}
           &copy; {new Date().getFullYear()}
-        </p>
+        </a>
       </div>
     </footer>
   );
